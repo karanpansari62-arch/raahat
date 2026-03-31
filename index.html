@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAAHAT - AI Mental Health Support for Students</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo">RAAHAT <i class="fas fa-heart" style="color: #ef4444;"></i></div>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showSection('homeSection')" class="active" id="nav-home">Home</a></li>
+      <li><a href="#" onclick="showSection('dashboardSection')" id="nav-dashboard">Dashboard</a></li>
+      <li><a href="#" onclick="showSection('chatSection')" id="nav-chat">Chatbot</a></li>
+      <li><a href="#" onclick="showSection('bookingSection')" id="nav-booking">Booking</a></li>
+      <li><a href="#" onclick="showSection('resourcesSection')" id="nav-resources">Resources</a></li>
+      <li><a href="#" onclick="showSection('communitySection')" id="nav-community">Community</a></li>
+      <li class="nav-item-dropdown">
+        <select id="languageSelectNav" class="modern-select" style="padding: 0.25rem 0.5rem; display: inline-block;">
+          <option value="en-US">English</option>
+          <option value="hi-IN">Hindi</option>
+          <option value="ks-IN">Kashmiri</option>
+          <option value="doi-IN">Dogri</option>
+        </select>
+      </li>
+      <li id="nav-profile-container" style="display: none;">
+        <a href="#" onclick="showSection('profileSection')" id="nav-profile" title="Profile">
+          <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+        </a>
+      </li>
+      <li id="nav-auth-container" class="nav-btn-wrapper"><button class="btn btn-primary nav-signup-btn" onclick="showSection('authSection')">Sign Up</button></li>
+    </ul>
+    <!-- Hamburger menu for mobile -->
+    <div class="hamburger" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- Home Section -->
+    <section id="homeSection" class="section active">
+      <div class="home-hero center-text" style="margin-bottom: 2rem;">
+        <h1 class="gradient-text" data-i18n="title">RAAHAT</h1>
+        <p class="subtitle" data-i18n="subtitle">AI Mental Health Support for Students</p>
+      </div>
+
+      <div class="feature-grid">
+        <!-- AI Chatbot -->
+        <div class="feature-card" onclick="showSection('chatSection')">
+          <div class="feature-icon" style="color: #0ea5e9;"><i class="fas fa-robot"></i></div>
+          <h3 data-i18n="featChatTitle">Zoon Bot 2.0</h3>
+          <p data-i18n="featChatDesc">Empathetic AI support available 24/7 in regional languages</p>
+        </div>
+
+        <!-- Counseling Booking -->
+        <div class="feature-card" onclick="showSection('bookingSection')">
+          <div class="feature-icon" style="color: #f59e0b;"><i class="fas fa-calendar-check"></i></div>
+          <h3 data-i18n="featBookTitle">Counseling Booking</h3>
+          <p data-i18n="featBookDesc">Secure and private sessions with professional psychologists</p>
+        </div>
+
+        <!-- Multi-Language Support -->
+        <div class="feature-card">
+          <div class="feature-icon" style="color: #10b981;"><i class="fas fa-language"></i></div>
+          <h3 data-i18n="featLangTitle">Multi-Language Support</h3>
+          <p data-i18n="featLangDesc">Support for Hindi, English, Kashmiri, and Dogri</p>
+        </div>
+
+        <!-- Resource Hub -->
+        <div class="feature-card" onclick="showSection('resourcesSection')">
+          <div class="feature-icon" style="color: #8b5cf6;"><i class="fas fa-book-medical"></i></div>
+          <h3 data-i18n="featResTitle">Resource Hub</h3>
+          <p data-i18n="featResDesc">Low-bandwidth videos, audio guides, and articles for mental well-being</p>
+        </div>
+
+        <!-- Peer Community -->
+        <div class="feature-card" onclick="showSection('communitySection')">
+          <div class="feature-icon" style="color: #ec4899;"><i class="fas fa-users"></i></div>
+          <h3 data-i18n="featPeerTitle">Peer Community</h3>
+          <p data-i18n="featPeerDesc">Anonymous forum for students to help each other</p>
+        </div>
+
+        <!-- Low Internet Mode -->
+        <div class="feature-card">
+          <div class="feature-icon" style="color: #64748b;"><i class="fas fa-wifi"></i></div>
+          <h3 data-i18n="featLowNetTitle">Low Internet Mode</h3>
+          <p data-i18n="featLowNetDesc">Text-first UI designed for rural and low-bandwidth regions</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboardSection" class="section">
+      <h2 class="section-title">Your Dashboard</h2>
+      <div class="dashboard-grid">
+        <div class="card stats-card">
+          <div class="stat-item">
+            <i class="fas fa-fire streak-icon"></i>
+            <h3>Streak</h3>
+            <p id="streakCount">5 Days</p>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-coins coin-icon"></i>
+            <h3>Coins</h3>
+            <p id="coinCount">150</p>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-smile face-icon"></i>
+            <h3>Current Mood</h3>
+            <p id="currentMood">Neutral</p>
+          </div>
+        </div>
+        <div class="card chart-card">
+          <div class="chart-header">
+            <h3>Mood Tracker</h3>
+            <div class="chart-controls">
+              <button class="chart-btn active" id="btnWeekly" onclick="updateChart('weekly')">Weekly</button>
+              <button class="chart-btn" id="btnMonthly" onclick="updateChart('monthly')">Monthly</button>
+            </div>
+          </div>
+          <canvas id="moodChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chatbot Section -->
+    <section id="chatSection" class="section">
+      <div class="chat-wrapper">
+        <!-- Sidebar for Chat History -->
+        <div class="chat-sidebar" id="chatSidebar">
+          <div class="sidebar-header">
+            <h3>Past Conversations</h3>
+            <button class="icon-btn" onclick="toggleChatSidebar()" title="Close Sidebar"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="sidebar-content" id="chatHistoryList">
+            <!-- Dynamically populated via script.js -->
+            <p style="text-align:center; color: var(--text-muted); padding: 1rem;">No history found.</p>
+          </div>
+          <div class="sidebar-footer">
+            <button class="btn btn-secondary w-100" onclick="clearAllChatHistory()">
+              <i class="fas fa-trash"></i> Clear All
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container card">
+          <div class="chat-header">
+            <div class="chat-header-title">
+              <div><i class="fas fa-robot"></i> Raahat AI</div>
+              <div style="font-size: 0.8rem; font-weight: 400; opacity: 0.8;">Powered by Zoon Bot 2.0</div>
+            </div>
+            <div class="chat-actions">
+              <button class="icon-btn chat-history-btn" onclick="startNewChat()" title="New Chat" style="background: rgba(255,255,255,0.2); color:white;">
+                <i class="fas fa-plus"></i>
+              </button>
+              <button class="icon-btn chat-history-btn" onclick="toggleChatSidebar()" title="Chat History">
+                <i class="fas fa-history"></i>
+              </button>
+              <button class="icon-btn reset-chat-btn" onclick="clearChat()" title="Reset Chat">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+          <div class="chat-box" id="chatBox">
+            <div class="message bot-message">
+              Hi! I'm Zoon Bot 2.0. How are you feeling today? 💙
+            </div>
+          </div>
+          <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="Type a message..." onkeypress="handleEnter(event)">
+            <button class="icon-btn" id="micBtn" onclick="startVoiceInput()" title="Voice Input">
+              <i class="fas fa-microphone"></i>
+            </button>
+            <button class="icon-btn primary" id="sendBtn" onclick="toggleChatbotState()" title="Send">
+              <i class="fas fa-paper-plane" id="sendIcon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="bookingSection" class="section">
+      <div class="booking-layout">
+        <!-- Main Column -->
+        <div class="booking-main">
+          <h2 class="section-title" style="text-align: left; margin-bottom: 1.5rem;">Book a Counselor</h2>
+          
+          <!-- Step 1: Counselors -->
+          <div class="booking-step">
+            <h3>Choose a Counselor</h3>
+            <div class="counselor-grid">
+              <div class="counselor-card" id="counselor-Aisha" onclick="selectCounselor('Dr. Aisha Khan')">
+                <div class="counselor-avatar"><i class="fas fa-user-md"></i></div>
+                <div class="counselor-info">
+                  <h4>Dr. Aisha Khan</h4>
+                  <p>Clinical Psychologist</p>
+                  <span class="counselor-meta"><i class="fas fa-map-marker-alt"></i> Online & Srinagar</span>
+                  <span class="counselor-meta"><i class="fas fa-check-circle"></i> 450+ Sessions</span>
+                </div>
+              </div>
+              <div class="counselor-card" id="counselor-Rahul" onclick="selectCounselor('Dr. Rahul Sharma')">
+                <div class="counselor-avatar"><i class="fas fa-user-md"></i></div>
+                <div class="counselor-info">
+                  <h4>Dr. Rahul Sharma</h4>
+                  <p>Anxiety & Stress Specialist</p>
+                  <span class="counselor-meta"><i class="fas fa-map-marker-alt"></i> Online Only</span>
+                  <span class="counselor-meta"><i class="fas fa-check-circle"></i> 320+ Sessions</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Date & Time -->
+          <div class="booking-step">
+            <h3>Select Date & Time</h3>
+            <div class="date-selector" id="dateSelector">
+              <!-- Populated dynamically via JS -->
+            </div>
+            <div class="time-slots">
+              <button class="time-slot" onclick="selectTime(this, '10:00 AM')">10:00 AM</button>
+              <button class="time-slot unavailable" disabled>11:30 AM</button>
+              <button class="time-slot" onclick="selectTime(this, '02:00 PM')">02:00 PM</button>
+              <button class="time-slot unavailable" disabled>03:30 PM</button>
+              <button class="time-slot" onclick="selectTime(this, '05:00 PM')">05:00 PM</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Session Type -->
+          <div class="booking-step">
+            <h3>Session Type</h3>
+            <div class="session-toggle">
+              <div class="session-type-btn" id="session-Online" onclick="selectSessionType('Online')">
+                <i class="fas fa-video"></i> Online Session
+              </div>
+              <div class="session-type-btn" id="session-Offline" onclick="selectSessionType('Offline')">
+                <i class="fas fa-user-friends"></i> Offline Session
+              </div>
+            </div>
+          </div>
+
+          <button id="confirmBookingBtn" class="btn btn-primary w-100 confirm-btn disabled" disabled onclick="confirmBooking()">
+            <i class="fas fa-calendar-check"></i> Confirm Booking
+          </button>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="booking-sidebar">
+          <div class="card emergency-card center-text">
+            <h3><i class="fas fa-exclamation-triangle"></i> Need Help Now?</h3>
+            <p>If you or someone you know is in immediate danger or experiencing a crisis.</p>
+            <button class="btn btn-danger w-100" onclick="window.location.href='tel:1098'">
+              <i class="fas fa-phone-alt"></i> Call 1098
+            </button>
+          </div>
+
+          <div class="card appointments-card">
+            <h3>My Appointments</h3>
+            <div id="appointmentsList" class="appointments-list">
+              <p class="empty-state">No upcoming appointments.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resourcesSection" class="section">
+      <div class="resource-header-area card">
+        <div class="resource-header-top">
+          <div>
+            <h2 class="section-title" style="text-align: left; margin-bottom: 0;">Resource Hub</h2>
+            <p class="subtitle" style="text-align: left; margin-bottom: 0;">Curated content for mental well-being</p>
+          </div>
+          <button class="btn btn-secondary low-data-btn">
+            <i class="fas fa-wifi"></i> Low Data Mode
+          </button>
+        </div>
+        <div class="resource-search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search videos, articles, audio guides...">
+        </div>
+        <div class="category-filters">
+          <button class="resource-pill active" onclick="filterResources('All', this)">All</button>
+          <button class="resource-pill" onclick="filterResources('Stress', this)">Stress</button>
+          <button class="resource-pill" onclick="filterResources('Anxiety', this)">Anxiety</button>
+          <button class="resource-pill" onclick="filterResources('Sleep', this)">Sleep</button>
+          <button class="resource-pill" onclick="filterResources('Depression', this)">Depression</button>
+          <button class="resource-pill" onclick="filterResources('Motivation', this)">Motivation</button>
+        </div>
+      </div>
+
+      <div class="resource-grid" id="resourceGrid">
+        <div class="resource-card" data-category="Stress">
+          <div class="resource-category-tag">Stress</div>
+          <div class="resource-icon-art"><i class="fas fa-video"></i></div>
+          <div class="resource-body">
+            <h4>5-Minute Grounding Technique</h4>
+            <p>A quick video guide to manage an acute stress response and stay present.</p>
+            <div class="resource-footer">
+              <span class="type-label">Video (12 MB)</span>
+              <button class="icon-btn primary"><i class="fas fa-download"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="Sleep">
+          <div class="resource-category-tag">Sleep</div>
+          <div class="resource-icon-art"><i class="fas fa-headphones"></i></div>
+          <div class="resource-body">
+            <h4>Deep Sleep Meditation</h4>
+            <p>Guided audio to help you fall asleep faster and improve sleep quality.</p>
+            <div class="resource-footer">
+              <span class="type-label">Audio (4 MB)</span>
+              <button class="icon-btn primary"><i class="fas fa-download"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="Anxiety">
+          <div class="resource-category-tag">Anxiety</div>
+          <div class="resource-icon-art"><i class="fas fa-file-alt"></i></div>
+          <div class="resource-body">
+            <h4>Understanding Exam Anxiety</h4>
+            <p>An article discussing practical strategies to manage stress before exams.</p>
+            <div class="resource-footer">
+              <span class="type-label">Article</span>
+              <button class="icon-btn primary"><i class="fas fa-book-reader"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profileSection" class="section">
+      <h2 class="section-title">Profile Hub</h2>
+      <div class="profile-container">
+        
+        <!-- Left Column: User Identity -->
+        <div class="profile-card identity-card">
+          <div class="profile-avatar"><i class="fas fa-user"></i></div>
+          <div class="profile-info-dense">
+            <h3 id="profileName">Student User</h3>
+            <p id="profileAgeText">Age: 20</p>
+          </div>
+          <div class="profile-stats-grid">
+            <div class="stat-box"><i class="fas fa-fire"></i> <span id="profileStreak">5 Days</span></div>
+            <div class="stat-box"><i class="fas fa-coins"></i> <span id="profileCoins">150 Coins</span></div>
+          </div>
+          <button class="btn btn-secondary edit-btn w-100" onclick="editProfile()">
+            <i class="fas fa-pencil-alt"></i> Edit Profile
+          </button>
+        </div>
+        
+        <!-- Right Column: Details & Settings -->
+        <div class="profile-settings-col">
+          
+          <div class="profile-card settings-card">
+            <h4>Account Details</h4>
+            <ul class="profile-details-list">
+              <li>
+                <span class="detail-label"><i class="fas fa-envelope"></i> Email</span>
+                <span class="detail-value">student@university.edu</span>
+              </li>
+              <li>
+                <span class="detail-label"><i class="fas fa-phone"></i> Phone</span>
+                <span class="detail-value">+1 (555) 123-4567</span>
+              </li>
+              <li>
+                <span class="detail-label"><i class="fas fa-calendar-alt"></i> Joined</span>
+                <span class="detail-value">August 2025</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="profile-card settings-card">
+            <h4>App Preferences</h4>
+            <div class="settings-list">
+              <div class="setting-item">
+                <div class="setting-label">
+                  <i class="fas fa-language"></i>
+                  <label for="languageSelect">Language (Applies App-wide)</label>
+                </div>
+                <select id="languageSelect" class="modern-select">
+                  <option value="en-US">English</option>
+                  <option value="hi-IN">Hindi</option>
+                  <option value="ks-IN">Kashmiri</option>
+                  <option value="doi-IN">Dogri</option>
+                </select>
+              </div>
+
+              <div class="setting-item theme-toggle-container">
+                <div class="setting-label">
+                  <i class="fas fa-moon"></i>
+                  <span>Dark Mode</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="themeToggle" onchange="toggleDarkMode()">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Auth Section -->
+    <section id="authSection" class="section">
+      <h2 class="section-title">Login / Sign Up</h2>
+      <div class="auth-container card center-text">
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+          <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+        </div>
+        
+        <form id="authForm" onsubmit="handleAuth(event)">
+          <div class="form-group">
+            <label for="authEmail">Email</label>
+            <input type="email" id="authEmail" required placeholder="your.email@example.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="authPassword">Password</label>
+            <input type="password" id="authPassword" required placeholder="Enter your password">
+          </div>
+          
+          <div class="form-group" id="ageFieldContainer" style="display: none;">
+            <label for="authAge">Age</label>
+            <input type="number" id="authAge" placeholder="Your age">
+          </div>
+          
+          <button type="submit" class="btn btn-primary w-100" id="authSubmitBtn">
+            Login
+          </button>
+        </form>
+        
+        <div class="forgot-password">
+          <a href="#" onclick="alert('Forgot Password flow to be implemented');">Forgot Password?</a>
+        </div>
+        
+        <div class="auth-divider">
+          <span>OR</span>
+        </div>
+        
+        <div class="social-login">
+          <button class="btn btn-google w-100" onclick="alert('Google Auth placeholder');">
+            <i class="fab fa-google"></i> Continue with Google
+          </button>
+          <button class="btn btn-facebook w-100" onclick="alert('Facebook Auth placeholder');">
+            <i class="fab fa-facebook-f"></i> Continue with Facebook
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="communitySection" class="section">
+      <h2 class="section-title">Peer Community</h2>
+      <div class="resources-container card center-text">
+        <i class="fas fa-users icon-large"></i>
+        <p class="resource-placeholder">Anonymous support forums.</p>
+        <p class="resource-sub">A safe space for students to help each other. Coming soon.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section about">
+        <h3 class="footer-logo">RAAHAT <i class="fas fa-heart" style="color: #ef4444;"></i></h3>
+        <p>“Healing in every dialect. Providing culturally-aware mental health support for students across regions.”</p>
+      </div>
+      <div class="footer-section links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#" onclick="showSection('chatSection')">AI Chatbot</a></li>
+          <li><a href="#" onclick="showSection('bookingSection')">Book Counselor</a></li>
+          <li><a href="#" onclick="showSection('resourcesSection')">Resource Hub</a></li>
+          <li><a href="#" onclick="showSection('communitySection')">Peer Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-section contact">
+        <h3>Contact</h3>
+        <p><i class="fas fa-envelope"></i> support@raahat.app</p>
+        <p class="emergency"><i class="fas fa-phone-alt"></i> Emergency: 1098</p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
